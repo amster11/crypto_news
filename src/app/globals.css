@@ -1,0 +1,190 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens — Premium Corporate / Legal
+   --------------------------------------------------------------------------- */
+@theme {
+  --color-navy-950: #0b1628; /* Deep Navy */
+  --color-navy-900: #111d31; /* Dark Navy */
+  --color-navy-800: #1c2a42;
+  --color-navy-700: #2a3a55;
+  --color-ivory: #f5f3ef; /* Warm Off-White */
+  --color-gold: #b89a62; /* Accent — decorative / on dark only */
+  --color-gold-deep: #7a6134; /* Accent for small text on light surfaces (AA) */
+  --color-ink: #172033; /* Text Dark */
+  --color-muted: #697386; /* Text Muted */
+  --color-line: #dde1e7; /* Border */
+  --color-mist: #a9b1bf; /* Muted text on dark surfaces */
+
+  --ease-premium: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --breakpoint-md: 48rem; /* 768px — tablet */
+  --breakpoint-lg: 64rem; /* 1024px — desktop */
+}
+
+@theme inline {
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-manrope), "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* Typographic scale */
+@utility text-display {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(2.4rem, 1.5rem + 3.4vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+}
+@utility text-h2 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(2.1rem, 1.5rem + 2.4vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+@utility text-h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 1.25rem + 0.8vw, 1.9rem);
+  line-height: 1.15;
+}
+@utility text-lead {
+  font-size: clamp(1.05rem, 1rem + 0.3vw, 1.2rem);
+  line-height: 1.7;
+}
+@utility text-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 6rem;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  body {
+    background: #ffffff;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    font-variant-numeric: lining-nums;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-navy-950);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gold-deep);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  .surface-dark :focus-visible {
+    outline-color: var(--color-gold);
+  }
+}
+
+/* Surfaces: keep muted text above WCAG AA on every background */
+.surface-ivory {
+  background-color: var(--color-ivory);
+  --color-muted: #5e6879;
+}
+.surface-dark {
+  color: #ffffff;
+  --color-muted: var(--color-mist);
+  --color-line: rgb(255 255 255 / 0.12);
+}
+
+/* Animated underline for text links */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.45s var(--ease-premium);
+}
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* ---------------------------------------------------------------------------
+   Reveal on scroll (enabled only with JS and without reduced motion)
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+    transition:
+      opacity 0.9s var(--ease-premium),
+      transform 0.9s var(--ease-premium);
+    transition-delay: calc(var(--reveal-delay, 0) * 1ms);
+  }
+  html.js [data-reveal="fade"] {
+    transform: none;
+  }
+  html.js [data-reveal][data-visible="true"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .float-soft {
+    animation: float-soft 7s ease-in-out infinite;
+  }
+}
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -8px, 0);
+  }
+}
+
+/* FAQ accordion — smooth height where supported */
+.faq-item {
+  interpolate-size: allow-keywords;
+}
+.faq-item::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 0.45s var(--ease-premium),
+    content-visibility 0.45s allow-discrete;
+}
+.faq-item[open]::details-content {
+  block-size: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .faq-item::details-content {
+    transition: none;
+  }
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
