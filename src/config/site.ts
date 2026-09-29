@@ -3,7 +3,7 @@
  *
  * Values wrapped in square brackets — e.g. "[Телефон]" — are placeholders.
  * They are rendered as-is on the site, but are automatically excluded from
- * links (tel:, mailto:) and Schema.org markup until real data is provided.
+ * links (tel:, mailto:, messengers) and Schema.org markup until real data is provided.
  */
 export const siteConfig = {
   /** Legal / brand name used in texts, titles and structured data. */
@@ -15,31 +15,35 @@ export const siteConfig = {
     tagline: "Business Services",
   },
   description:
-    "Юридический адрес от собственников, регистрация компании и комплексное сопровождение бизнеса — всё в одном месте.",
+    "Регистрация ООО, АО и ИП, юридические адреса от собственников в Москве, сопровождение налоговых проверок и ликвидация компаний.",
   /** Production URL. Set NEXT_PUBLIC_SITE_URL in the environment. */
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com").replace(/\/$/, ""),
   locale: "ru_RU",
   language: "ru",
   /** Currency used in prices and Schema.org offers. */
-  currency: "EUR",
+  currency: "RUB",
 
   contacts: {
     phone: "[Телефон]",
-    /** Digits only, international format, e.g. "35799123456". */
-    whatsapp: "[WhatsApp]",
     email: "[Email]",
     address: "[Адрес]",
-    city: "[Город]",
-    country: "[Страна]",
+    city: "Москва",
+    country: "Россия",
+    /** Country code for Schema.org (ISO 3166-1). */
+    countryCode: "RU",
     workingHours: "[Часы работы]",
+    /** Telegram username without @, e.g. "company_bot". */
+    telegram: "[Telegram]",
+    /** Full link to the MAX chat/profile. */
+    max: "[MAX]",
   },
 
-  /** Leave empty until real profiles exist. */
+  /** Other social profiles (optional). */
   socials: [] as { label: string; href: string }[],
 
   legal: {
     entityName: "[Юридическое наименование]",
-    registrationNumber: "[Регистрационный номер]",
+    registrationNumber: "[ОГРН / ИНН]",
     policyUpdatedAt: "[Дата]",
   },
 

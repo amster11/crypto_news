@@ -7,12 +7,13 @@ import { PageHero } from "@/components/sections/PageHero";
 import { ProcessSection } from "@/components/sections/ProcessSection";
 import { primaryCta, routes } from "@/data/navigation";
 import { services } from "@/data/services";
+import { formatPrice } from "@/lib/price";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "Услуги для бизнеса",
   description:
-    "Юридический адрес, регистрация компании, бизнес под ключ и сопутствующие юридические и административные услуги для предпринимателей.",
+    "Регистрация ООО, АО и ИП, юридические адреса от собственников в Москве, сопровождение налоговых проверок, ликвидация и консалтинг.",
   path: routes.services,
 });
 
@@ -21,8 +22,8 @@ export default function ServicesPage() {
     <>
       <PageHero
         eyebrow="Услуги"
-        title="Решения для открытия и развития бизнеса"
-        subtitle="От регистрации компании до полного административного сопровождения. Выберите отдельную услугу или комплексное решение."
+        title="Готовые решения для вашего бизнеса"
+        subtitle="Регистрация и изменения, юридический адрес, налоговые проверки, ликвидация и консультации — выберите нужное направление."
         breadcrumbs={[{ name: "Услуги", path: routes.services }]}
       >
         <Button href={primaryCta.href} size="lg" arrow>
@@ -48,17 +49,16 @@ export default function ServicesPage() {
                     <p className="mt-4 max-w-md text-muted">{service.summary}</p>
                   </div>
                   <ul className="grid gap-3 text-[0.95rem] text-ink/85 lg:col-span-4">
-                    {service.includes.map((item) => (
-                      <li key={item.title} className="flex gap-3">
+                    {(service.benefits?.items.map((item) => item.title) ?? service.offers.map((o) => o.title)).map((item) => (
+                      <li key={item} className="flex gap-3">
                         <span aria-hidden="true" className="mt-3 h-px w-4 shrink-0 bg-gold" />
-                        {item.title}
+                        {item}
                       </li>
                     ))}
                   </ul>
                   <div className="flex items-end justify-between gap-6 lg:col-span-2 lg:flex-col lg:items-end">
                     <p className="text-right">
-                      <span className="block text-[0.8rem] text-muted">{service.price.prefix}</span>
-                      <span className="font-serif text-[2rem] leading-none text-ink">{service.price.value}</span>
+                      <span className="font-serif text-[1.6rem] leading-tight text-ink">{formatPrice(service.price)}</span>
                     </p>
                     <span
                       aria-hidden="true"

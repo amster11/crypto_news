@@ -9,7 +9,7 @@ export function WhyUsSection() {
       <div aria-hidden="true" className="absolute top-0 left-1/2 hidden h-24 w-px bg-gradient-to-b from-gold/60 to-transparent lg:block" />
       <Container>
         <SectionHeading id="why-title" eyebrow="Преимущества" title={whyUs.title} tone="dark" />
-        <div className="mt-16 grid gap-12 md:grid-cols-2 lg:mt-20 lg:grid-cols-4 lg:gap-10">
+        <div className="mt-16 grid gap-12 md:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-x-12 lg:gap-y-16">
           {whyUs.items.map((item, index) => (
             <FeatureItem
               key={item.title}

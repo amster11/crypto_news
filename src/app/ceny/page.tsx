@@ -1,18 +1,19 @@
-import { CTASection } from "@/components/CTASection";
+import { OfferList } from "@/components/OfferList";
+import { TextLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FAQSection } from "@/components/sections/FAQSection";
+import { LeadSection } from "@/components/sections/LeadSection";
 import { PageHero } from "@/components/sections/PageHero";
-import { PricingSection } from "@/components/sections/PricingSection";
 import { getFaqItems } from "@/data/faq";
 import { routes } from "@/data/navigation";
-import { additionalPrices, pricingNotes } from "@/data/pricing";
+import { pricingNotes } from "@/data/pricing";
+import { services } from "@/data/services";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "Цены на услуги",
   description:
-    "Прозрачные цены на юридический адрес, регистрацию компании и бизнес под ключ. Состав пакетов и стоимость дополнительных услуг.",
+    "Прайс-лист: регистрация ООО и ИП от 5 000 ₽, юридический адрес от 23 000 ₽ за 11 месяцев, ликвидация ИП 10 000 ₽, ликвидация ООО от 45 000 ₽.",
   path: routes.pricing,
 });
 
@@ -21,65 +22,50 @@ export default function PricingPage() {
     <>
       <PageHero
         eyebrow="Цены"
-        title="Стоимость услуг"
-        subtitle="Выберите готовый пакет или отдельную услугу. Состав и стоимость фиксируем до начала работы."
+        title="Простые и прозрачные цены"
+        subtitle="Вы заранее знаете стоимость услуги и понимаете, что в неё входит. Нажмите «Заказать» — и мы перезвоним."
         breadcrumbs={[{ name: "Цены", path: routes.pricing }]}
-      />
+      >
+        <ul className="grid gap-3 text-[0.95rem] text-muted">
+          {pricingNotes.map((note) => (
+            <li key={note} className="flex gap-4">
+              <span aria-hidden="true" className="mt-3 h-px w-5 shrink-0 bg-gold" />
+              {note}
+            </li>
+          ))}
+        </ul>
+      </PageHero>
 
-      <PricingSection showLink={false} />
-
-      <section aria-labelledby="extra-prices-title" className="py-24 lg:py-36">
-        <Container className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-4">
-            <SectionHeading
-              id="extra-prices-title"
-              eyebrow="Отдельные услуги"
-              title="Дополнительные услуги"
-              description="Можно заказать отдельно или добавить к любому пакету."
-            />
-          </div>
-          <div className="lg:col-span-8">
-            <table data-reveal className="w-full border-collapse text-left">
-              <caption className="sr-only">Стоимость дополнительных услуг</caption>
-              <thead>
-                <tr className="border-b border-ink/80">
-                  <th scope="col" className="text-eyebrow py-4 font-semibold text-muted">
-                    Услуга
-                  </th>
-                  <th scope="col" className="text-eyebrow py-4 text-right font-semibold text-muted">
-                    Стоимость
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {additionalPrices.map((row) => (
-                  <tr key={row.name} className="border-b border-line">
-                    <th scope="row" className="py-5 pr-6 font-serif text-[1.3rem] font-normal text-ink sm:text-[1.45rem]">
-                      {row.name}
-                    </th>
-                    <td className="py-5 text-right whitespace-nowrap text-ink">от {row.price}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <ul data-reveal className="mt-10 grid gap-3 text-[0.95rem] text-muted">
-              {pricingNotes.map((note) => (
-                <li key={note} className="flex gap-4">
-                  <span aria-hidden="true" className="mt-3 h-px w-5 shrink-0 bg-gold" />
-                  {note}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Container>
-      </section>
+      {services.map((service, index) => (
+        <section
+          key={service.slug}
+          aria-labelledby={`price-${service.slug}`}
+          className={index % 2 === 1 ? "surface-ivory py-20 lg:py-28" : "py-20 lg:py-28"}
+        >
+          <Container className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+            <div data-reveal className="lg:col-span-4">
+              <p className="font-serif text-[1.1rem] text-gold-deep">{service.number}</p>
+              <h2 id={`price-${service.slug}`} className="text-h2 mt-3 text-ink">
+                {service.menuTitle}
+              </h2>
+              <p className="mt-5 max-w-sm text-muted">{service.summary}</p>
+              <p className="mt-8">
+                <TextLink href={service.href}>Подробнее об услуге</TextLink>
+              </p>
+            </div>
+            <div className="lg:col-span-8">
+              <OfferList service={service} />
+            </div>
+          </Container>
+        </section>
+      ))}
 
       <FAQSection
-        items={getFaqItems(["consultation", "address-only", "turnkey-includes"])}
+        items={getFaqItems(["address-price", "notary-costs", "liquidation-price", "tax-price"])}
         title="Вопросы о стоимости"
         className="surface-ivory"
       />
-      <CTASection />
+      <LeadSection surface="white" />
     </>
   );
 }

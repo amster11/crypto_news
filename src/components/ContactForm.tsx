@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useId, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { AlertCircle, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { routes } from "@/data/navigation";
-import { serviceOptions } from "@/data/services";
+import { OTHER_SERVICE_OPTION, serviceOptionGroups } from "@/data/services";
+import { SELECT_SERVICE_EVENT } from "@/components/OrderButton";
 import { LIMITS, validateLead, type LeadErrors, type LeadInput } from "@/lib/leads";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +31,17 @@ export function ContactForm({ defaultService = "", className }: { defaultService
   const [serverMessage, setServerMessage] = useState("");
 
   const id = (name: string) => `${uid}-${name}`;
+
+  // "Заказать" buttons preselect the service in the form on the same page.
+  useEffect(() => {
+    const onSelect = (event: Event) => {
+      const service = (event as CustomEvent<string>).detail;
+      setStatus("idle");
+      setValues((prev) => ({ ...prev, service }));
+    };
+    window.addEventListener(SELECT_SERVICE_EVENT, onSelect);
+    return () => window.removeEventListener(SELECT_SERVICE_EVENT, onSelect);
+  }, []);
 
   function update<K extends keyof LeadInput>(key: K, value: LeadInput[K]) {
     setValues((prev) => ({ ...prev, [key]: value }));
@@ -130,7 +142,7 @@ export function ContactForm({ defaultService = "", className }: { defaultService
             {...describedBy(id("name"), errors.name)}
           />
         </Field>
-        <Field id={id("phone")} label="Телефон / WhatsApp" error={errors.phone} required>
+        <Field id={id("phone")} label="Телефон" error={errors.phone} required>
           <input
             id={id("phone")}
             name="phone"
@@ -146,11 +158,10 @@ export function ContactForm({ defaultService = "", className }: { defaultService
             {...describedBy(id("phone"), errors.phone)}
           />
         </Field>
-        <Field id={id("email")} label="Email" error={errors.email} required>
+        <Field id={id("email")} label="Почта" error={errors.email}>
           <input
             id={id("email")}
             name="email"
-            required
             type="email"
             autoComplete="email"
             maxLength={LIMITS.email}
@@ -174,11 +185,16 @@ export function ContactForm({ defaultService = "", className }: { defaultService
             {...describedBy(id("service"), errors.service)}
           >
             <option value="">Выберите услугу</option>
-            {serviceOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
+            {serviceOptionGroups.map((group) => (
+              <optgroup key={group.label} label={group.label}>
+                {group.options.map((option) => (
+                  <option key={option} value={option}>
+                    {option.replace(`${group.label}: `, "")}
+                  </option>
+                ))}
+              </optgroup>
             ))}
+            <option value={OTHER_SERVICE_OPTION}>{OTHER_SERVICE_OPTION}</option>
           </select>
         </Field>
         <Field id={id("message")} label="Сообщение" error={errors.message} className="sm:col-span-2">
@@ -248,7 +264,7 @@ export function ContactForm({ defaultService = "", className }: { defaultService
               Отправка…
             </span>
           ) : (
-            "Отправить заявку"
+            "Отправить"
           )}
         </Button>
         <p className="text-[0.8rem] text-muted">

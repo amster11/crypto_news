@@ -24,8 +24,12 @@ export function mailHref(email: string) {
   return isFilled(email) ? `mailto:${email}` : undefined;
 }
 
-export function whatsappHref(number: string) {
-  return isFilled(number) ? `https://wa.me/${number.replace(/\D/g, "")}` : undefined;
+export function telegramHref(username: string) {
+  return isFilled(username) ? `https://t.me/${username.replace(/^@/, "")}` : undefined;
+}
+
+export function maxHref(link: string) {
+  return isFilled(link) ? link : undefined;
 }
 
 /** Stagger delay (ms) for elements with `data-reveal`. */

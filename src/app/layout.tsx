@@ -26,7 +26,7 @@ const sans = Manrope({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.logo.wordmark} — юридический адрес и регистрация бизнеса`,
+    default: `${siteConfig.logo.wordmark} — регистрация бизнеса и юридические адреса в Москве`,
     template: `%s | ${siteConfig.logo.wordmark}`,
   },
   description: siteConfig.description,

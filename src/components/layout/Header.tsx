@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
@@ -72,22 +72,49 @@ export function Header() {
 
         <nav aria-label="Основная навигация" className="hidden lg:block">
           <ul className="flex items-center gap-9">
-            {mainNav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={isActive(item.href) ? "page" : undefined}
-                  className={cn(
-                    "link-underline pb-1 text-[0.9rem] font-medium transition-colors",
-                    isActive(item.href)
-                      ? "text-ink [background-size:100%_1px]"
-                      : "text-ink/75 hover:text-ink",
+            {mainNav.map((item) => {
+              const hasMenu = item.href === "/uslugi";
+              const active = isActive(item.href) || (hasMenu && services.some((s) => isActive(s.href)));
+              return (
+                <li key={item.href} className={hasMenu ? "group relative" : undefined}>
+                  <Link
+                    href={item.href}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                    className={cn(
+                      "link-underline inline-flex items-center gap-1 pb-1 text-[0.9rem] font-medium transition-colors",
+                      active ? "text-ink [background-size:100%_1px]" : "text-ink/75 hover:text-ink",
+                    )}
+                  >
+                    {item.label}
+                    {hasMenu && (
+                      <ChevronDown
+                        aria-hidden="true"
+                        className="size-3.5 transition-transform duration-300 group-focus-within:rotate-180 group-hover:rotate-180"
+                        strokeWidth={1.5}
+                      />
+                    )}
+                  </Link>
+                  {hasMenu && (
+                    <div className="invisible absolute top-full left-1/2 z-10 w-80 -translate-x-1/2 pt-5 opacity-0 transition-[opacity,visibility] duration-300 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+                      <ul className="border border-line bg-white p-2 shadow-[0_30px_60px_-30px_rgb(11_22_40/0.4)]">
+                        {services.map((service) => (
+                          <li key={service.slug}>
+                            <Link
+                              href={service.href}
+                              aria-current={isActive(service.href) ? "page" : undefined}
+                              className="flex items-baseline gap-4 px-4 py-3 text-[0.92rem] text-ink transition-colors hover:bg-ivory focus-visible:bg-ivory"
+                            >
+                              <span className="font-serif text-gold-deep">{service.number}</span>
+                              {service.menuTitle}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   )}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
@@ -142,7 +169,7 @@ export function Header() {
                           className="text-[0.95rem] text-muted hover:text-ink"
                         >
                           <span className="mr-2 text-gold-deep">{service.number}</span>
-                          {service.title}
+                          {service.menuTitle}
                         </Link>
                       </li>
                     ))}

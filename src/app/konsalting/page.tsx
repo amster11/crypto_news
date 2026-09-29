@@ -2,7 +2,7 @@ import { ServicePageTemplate } from "@/components/sections/ServicePageTemplate";
 import { getService } from "@/data/services";
 import { buildMetadata } from "@/lib/seo";
 
-const service = getService("additional");
+const service = getService("consulting");
 
 export const metadata = buildMetadata({
   title: service.seo.title,

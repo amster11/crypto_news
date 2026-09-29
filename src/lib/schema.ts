@@ -18,7 +18,7 @@ function postalAddress(): Json | undefined {
     "@type": "PostalAddress",
     streetAddress: contacts.address,
     ...(isFilled(contacts.city) && { addressLocality: contacts.city }),
-    ...(isFilled(contacts.country) && { addressCountry: contacts.country }),
+    addressCountry: contacts.countryCode,
   };
 }
 
@@ -27,6 +27,7 @@ function contactFields(): Json {
     ...(isFilled(contacts.phone) && { telephone: contacts.phone }),
     ...(isFilled(contacts.email) && { email: contacts.email }),
     ...(siteConfig.socials.length > 0 && { sameAs: siteConfig.socials.map((s) => s.href) }),
+    areaServed: { "@type": "City", name: contacts.city },
   };
 }
 
@@ -63,7 +64,15 @@ export function localBusinessSchema(): Json | null {
 }
 
 export function serviceSchema(service: Service): Json {
-  const priceValue = service.price.value.replace(/[^\d.]/g, "");
+  const offers = service.offers
+    .filter((offer) => offer.price.amount !== undefined)
+    .map((offer) => ({
+      "@type": "Offer",
+      name: offer.title,
+      price: offer.price.amount,
+      priceCurrency: siteConfig.currency,
+      url: absoluteUrl(service.href),
+    }));
   return {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -71,18 +80,11 @@ export function serviceSchema(service: Service): Json {
     serviceType: service.title,
     description: service.seo.description,
     url: absoluteUrl(service.href),
+    areaServed: { "@type": "City", name: contacts.city },
     ...(isFilled(siteConfig.name) && {
       provider: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
     }),
-    ...(isFilled(contacts.country) && { areaServed: contacts.country }),
-    ...(priceValue && {
-      offers: {
-        "@type": "Offer",
-        priceCurrency: siteConfig.currency,
-        price: priceValue,
-        url: absoluteUrl(service.href),
-      },
-    }),
+    ...(offers.length > 0 && { offers }),
   };
 }
 

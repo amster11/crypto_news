@@ -1,10 +1,11 @@
 export const routes = {
   home: "/",
   services: "/uslugi",
-  legalAddress: "/yuridicheskiy-adres",
   registration: "/registraciya-biznesa",
-  turnkey: "/biznes-pod-klyuch",
-  additional: "/dopolnitelnye-uslugi",
+  legalAddress: "/yuridicheskiy-adres",
+  taxAudits: "/nalogovye-proverki",
+  liquidation: "/likvidaciya",
+  consulting: "/konsalting",
   pricing: "/ceny",
   about: "/o-kompanii",
   faq: "/faq",
@@ -34,23 +35,12 @@ export const secondaryCta = {
   href: routes.services,
 };
 
-export const footerNav = {
-  services: {
-    title: "Услуги",
-    links: [
-      { label: "Юридический адрес", href: routes.legalAddress },
-      { label: "Регистрация бизнеса", href: routes.registration },
-      { label: "Бизнес под ключ", href: routes.turnkey },
-      { label: "Дополнительные услуги", href: routes.additional },
-    ],
-  },
-  company: {
-    title: "Компания",
-    links: [
-      { label: "О компании", href: routes.about },
-      { label: "Цены", href: routes.pricing },
-      { label: "FAQ", href: routes.faq },
-      { label: "Контакты", href: routes.contacts },
-    ],
-  },
+export const companyNav = {
+  title: "Компания",
+  links: [
+    { label: "О компании", href: routes.about },
+    { label: "Цены", href: routes.pricing },
+    { label: "FAQ", href: routes.faq },
+    { label: "Контакты", href: routes.contacts },
+  ],
 };

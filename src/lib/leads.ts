@@ -29,11 +29,10 @@ export function validateLead(input: LeadInput): LeadErrors {
   if (name.length < 2) errors.name = "Укажите ваше имя.";
   else if (name.length > LIMITS.name) errors.name = "Имя слишком длинное.";
 
-  if (!phone) errors.phone = "Укажите телефон или WhatsApp.";
+  if (!phone) errors.phone = "Укажите телефон.";
   else if (!PHONE_RE.test(phone)) errors.phone = "Проверьте формат номера, например +000 00 000 000.";
 
-  if (!email) errors.email = "Укажите email.";
-  else if (!EMAIL_RE.test(email) || email.length > LIMITS.email)
+  if (email && (!EMAIL_RE.test(email) || email.length > LIMITS.email))
     errors.email = "Проверьте адрес электронной почты.";
 
   if (input.service.length > LIMITS.service) errors.service = "Выберите услугу из списка.";

@@ -4,7 +4,7 @@ import { Container } from "@/components/ui/Container";
 import { Photo } from "@/components/ui/Photo";
 import { Eyebrow } from "@/components/ui/SectionHeading";
 import { hero } from "@/data/content";
-import { primaryCta, secondaryCta } from "@/data/navigation";
+import { FORM_ANCHOR, primaryCta, secondaryCta } from "@/data/navigation";
 
 export function Hero() {
   return (
@@ -22,7 +22,7 @@ export function Hero() {
             {hero.subtitle}
           </p>
           <div data-reveal style={revealDelay(240)} className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <Button href={primaryCta.href} size="lg" arrow>
+            <Button href={`#${FORM_ANCHOR}`} size="lg" arrow>
               {primaryCta.label}
             </Button>
             <Button href={secondaryCta.href} size="lg" variant="secondary">

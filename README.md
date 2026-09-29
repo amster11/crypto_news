@@ -1,6 +1,8 @@
 # Business Services — корпоративный сайт
 
-Премиальный сайт компании юридических и бизнес-услуг: юридический адрес, регистрация бизнеса, бизнес под ключ, сопутствующие услуги.
+Премиальный сайт компании юридических и бизнес-услуг в Москве: регистрация ООО/АО/ИП, юридические адреса от собственников, налоговые проверки, ликвидация, консалтинг.
+
+Рукописное ТЗ заказчика и его расшифровка — `docs/tz/`.
 
 **Стек:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Lucide Icons. Framer Motion не используется: анимации сделаны на CSS и одном IntersectionObserver.
 
@@ -17,12 +19,12 @@ npm run lint && npm run build
 
 | Что | Файл |
 | --- | --- |
-| Название, контакты, реквизиты, соцсети, URL | `src/config/site.ts` |
-| Услуги (тексты, состав, этапы, цена, FAQ) | `src/data/services.ts` |
-| Пакеты и цены, доп. услуги | `src/data/pricing.ts` |
+| Название, телефон, почта, Telegram, MAX, адрес, реквизиты | `src/config/site.ts` |
+| Услуги, прайс (позиции и цены в ₽), этапы, FAQ | `src/data/services.ts` |
+| Карточки цен на главной, примечания к ценам | `src/data/pricing.ts` |
 | FAQ | `src/data/faq.ts` |
 | Отзывы | `src/data/testimonials.ts` |
-| Hero, преимущества, процесс, «О компании», цифры | `src/data/content.ts` |
+| Hero, «Наши преимущества», процесс, «О компании», цифры | `src/data/content.ts` |
 | Фотографии | `src/data/images.ts` |
 | Меню и URL страниц | `src/data/navigation.ts` |
 | Политика и условия (шаблоны) | `src/data/legal.ts` |
@@ -32,16 +34,16 @@ npm run lint && npm run build
 
 Значения в квадратных скобках (`[Телефон]`, `[Email]`, `[Ответ на вопрос]`, `€XX`, `[XX]+` …) — это заглушки. Реальные данные нигде не выдуманы. Функция `isFilled()` (`src/lib/utils.ts`) автоматически исключает заглушки:
 
-- из ссылок `tel:`, `mailto:` и WhatsApp;
-- из Schema.org: `Organization` появится после заполнения названия, `LocalBusiness` — после адреса, `FAQPage` — после ответов, `Offer` у `Service` — после цены.
+- из ссылок `tel:`, `mailto:`, Telegram и MAX;
+- из Schema.org: `Organization` появится после заполнения названия, `LocalBusiness` — после адреса, `FAQPage` — только вопросы с заполненными ответами.
 
 ## Страницы
 
-`/` · `/uslugi` · `/yuridicheskiy-adres` · `/registraciya-biznesa` · `/biznes-pod-klyuch` · `/dopolnitelnye-uslugi` · `/ceny` · `/o-kompanii` · `/faq` · `/kontakty` · `/politika-konfidencialnosti` · `/usloviya-ispolzovaniya` · 404, а также `sitemap.xml`, `robots.txt` и OG-изображение `/og.png`.
+`/` · `/uslugi` · `/registraciya-biznesa` · `/yuridicheskiy-adres` · `/nalogovye-proverki` · `/likvidaciya` · `/konsalting` · `/ceny` · `/o-kompanii` · `/faq` · `/kontakty` · `/politika-konfidencialnosti` · `/usloviya-ispolzovaniya` · 404, а также `sitemap.xml`, `robots.txt` и OG-изображение `/og.png`.
 
 ## Форма заявки
 
-`src/components/ContactForm.tsx` отправляет данные в `POST /api/lead` (`src/app/api/lead/route.ts`). Валидация общая для клиента и сервера (`src/lib/leads.ts`), есть honeypot-защита от ботов.
+Форма «Обратный звонок» (`src/components/ContactForm.tsx`: имя, телефон, почта — необязательно, услуга, сообщение) отправляет данные в `POST /api/lead` (`src/app/api/lead/route.ts`). Валидация общая для клиента и сервера (`src/lib/leads.ts`), есть honeypot-защита от ботов. Кнопки «Заказать» (`OrderButton`) прокручивают к форме на текущей странице и подставляют выбранную услугу.
 
 Доставку выполняет `deliverLead()` в `src/lib/leads.ts`:
 

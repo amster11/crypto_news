@@ -2,16 +2,18 @@ import Link from "next/link";
 import { Logo } from "./Logo";
 import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/config/site";
-import { footerNav, routes } from "@/data/navigation";
-import { mailHref, telHref, whatsappHref } from "@/lib/utils";
+import { ContactIcons, contactChannels } from "@/components/ContactLinks";
+import { companyNav, routes } from "@/data/navigation";
+import { services } from "@/data/services";
 
 export function Footer() {
-  const { contacts } = siteConfig;
+  const servicesNav = {
+    title: "Услуги",
+    links: services.map((service) => ({ label: service.menuTitle, href: service.href })),
+  };
   const contactItems = [
-    { label: "Телефон", value: contacts.phone, href: telHref(contacts.phone) },
-    { label: "WhatsApp", value: contacts.whatsapp, href: whatsappHref(contacts.whatsapp) },
-    { label: "Email", value: contacts.email, href: mailHref(contacts.email) },
-    { label: "Адрес", value: contacts.address },
+    ...contactChannels.map(({ label, value, href }) => ({ label, value, href })),
+    { label: "Адрес", value: siteConfig.contacts.address, href: undefined as string | undefined },
   ];
 
   return (
@@ -24,7 +26,7 @@ export function Footer() {
           </p>
         </div>
 
-        {[footerNav.services, footerNav.company].map((group) => (
+        {[servicesNav, companyNav].map((group) => (
           <nav key={group.title} aria-label={group.title} className="lg:col-span-2">
             <h2 className="text-eyebrow text-gold">{group.title}</h2>
             <ul className="mt-6 grid gap-3">
@@ -50,7 +52,11 @@ export function Footer() {
                 <dt className="text-mist">{item.label}</dt>
                 <dd className="text-white/85">
                   {item.href ? (
-                    <a href={item.href} className="link-underline hover:text-white">
+                    <a
+                      href={item.href}
+                      className="link-underline hover:text-white"
+                      {...(item.href.startsWith("http") && { target: "_blank", rel: "noopener noreferrer" })}
+                    >
                       {item.value}
                     </a>
                   ) : (
@@ -59,25 +65,8 @@ export function Footer() {
                 </dd>
               </div>
             ))}
-            <div className="grid grid-cols-[6rem_1fr] gap-4 text-[0.95rem]">
-              <dt className="text-mist">Соцсети</dt>
-              <dd className="flex flex-wrap gap-x-4 gap-y-1 text-white/85">
-                {siteConfig.socials.length > 0
-                  ? siteConfig.socials.map((social) => (
-                      <a
-                        key={social.href}
-                        href={social.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="link-underline hover:text-white"
-                      >
-                        {social.label}
-                      </a>
-                    ))
-                  : "[Социальные сети]"}
-              </dd>
-            </div>
           </dl>
+          <ContactIcons tone="dark" className="mt-8" />
         </div>
       </Container>
 

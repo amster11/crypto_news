@@ -2,6 +2,7 @@ import { revealDelay } from "@/lib/utils";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Service } from "@/data/services";
+import { formatPrice } from "@/lib/price";
 
 /** Editorial service tile — used inside a bordered grid. */
 export function ServiceCard({ service, index = 0 }: { service: Service; index?: number }) {
@@ -25,7 +26,8 @@ export function ServiceCard({ service, index = 0 }: { service: Service; index?: 
       </div>
       <h3 className="text-h3 mt-10 text-ink lg:mt-16">{service.title}</h3>
       <p className="mt-4 max-w-md text-muted">{service.summary}</p>
-      <p className="mt-auto pt-10">
+      <div className="mt-auto flex items-end justify-between gap-4 pt-10">
+        <p>
         <Link
           href={service.href}
           className="inline-flex items-center gap-2 text-[0.9rem] font-semibold text-ink after:absolute after:inset-0 after:content-['']"
@@ -35,7 +37,9 @@ export function ServiceCard({ service, index = 0 }: { service: Service; index?: 
             Подробнее
           </span>
         </Link>
-      </p>
+        </p>
+        <p className="text-right text-[0.9rem] text-muted">{formatPrice(service.price)}</p>
+      </div>
     </article>
   );
 }

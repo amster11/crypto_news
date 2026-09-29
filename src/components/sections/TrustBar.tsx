@@ -1,9 +1,9 @@
-import { Clock, KeyRound, ReceiptText, UserRound } from "lucide-react";
+import { Building2, Clock, KeyRound, ShieldCheck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { trustBar } from "@/data/content";
 import { revealDelay } from "@/lib/utils";
 
-const icons = { receipt: ReceiptText, key: KeyRound, clock: Clock, user: UserRound };
+const icons = { building: Building2, key: KeyRound, clock: Clock, shield: ShieldCheck };
 
 export function TrustBar() {
   return (
